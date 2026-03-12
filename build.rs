@@ -2,6 +2,8 @@
 fn main() {
     #[cfg(feature = "r1")]
     println!("cargo:rebuild-if-changed=device_R1.yaml");
+    #[cfg(feature = "r2")]
+    println!("cargo:rebuild-if-changed=device_R2.yaml");
     #[cfg(feature = "r3")]
     println!("cargo:rebuild-if-changed=device_R3.yaml");
     #[cfg(feature = "r4")]

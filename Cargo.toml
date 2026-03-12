@@ -63,6 +63,7 @@ defmt-03 = [
 	"embassy-time/defmt-timestamp-uptime",
 ]
 r1 = []
+r2 = []
 r3 = []
 r4 = []
 r5 = []

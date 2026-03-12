@@ -7,11 +7,13 @@
 //! to one of the official Datasheets:
 //!
 //! - [`Datasheet R1`]
+//! - [`Datasheet R2`]
 //! - [`Datasheet R3`]
 //! - [`Datasheet R4`]
 //! - [`Datasheet R5`]
 //!
 //! [`Datasheet R1`]: https://www.ti.com/lit/ug/sluua43a/sluua43a.pdf
+//! [`Datasheet R2`]: https://www.ti.com/lit/ug/sluub54a/sluub54a.pdf
 //! [`Datasheet R3`]: https://www.ti.com/lit/ug/sluubu5a/sluubu5a.pdf
 //! [`Datasheet R4`]: https://www.ti.com/lit/ug/sluuch2/sluuch2.pdf
 //! [`Datasheet R5`]: https://www.ti.com/lit/ug/sluucn4b/sluucn4b.pdf
@@ -34,6 +36,8 @@ pub use common::Config;
 pub use error::BQ40Z50Error;
 #[cfg(feature = "r1")]
 pub use versions::r1::Bq40z50R1;
+#[cfg(feature = "r2")]
+pub use versions::r2::Bq40z50R2;
 #[cfg(feature = "r3")]
 pub use versions::r3::Bq40z50R3;
 #[cfg(feature = "r4")]

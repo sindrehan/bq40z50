@@ -19,9 +19,9 @@ pub(crate) const AUTH_KEY_LEN_BYTES: u8 = AUTH_KEY_DATA_LEN_BYTES + MAC_CMD_ADDR
 
 pub(crate) const MFG_INFO_CMD: u8 = 0x70;
 
-#[cfg(not(all(feature = "r1", not(any(feature = "r3", feature = "r4", feature = "r5")))))]
+#[cfg(any(feature = "r3", feature = "r4", feature = "r5"))]
 pub(crate) const CHRG_VOLTAGE_OVERRIDE_CMD: [u8; MAC_CMD_ADDR_SIZE_BYTES as usize] = 0x00B0u16.to_le_bytes();
-#[cfg(not(all(feature = "r1", not(any(feature = "r3", feature = "r4", feature = "r5")))))]
+#[cfg(any(feature = "r3", feature = "r4", feature = "r5"))]
 pub(crate) const CHRG_VOLTAGE_OVERRIDE_SIZE_BYTES: u8 = 10;
 
 pub(crate) const DEFAULT_BUS_RETRIES: usize = 3;

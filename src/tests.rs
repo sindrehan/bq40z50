@@ -379,7 +379,7 @@ macro_rules! bq40z50_tests {
                 bq.device.interface.delay.done();
             }
 
-            #[cfg(not(feature = "r1"))]
+            #[cfg(not(any(feature = "r1", feature = "r2")))]
             #[tokio::test]
             async fn test_charging_override_voltage() {
                 let expectations = vec![
@@ -421,7 +421,7 @@ macro_rules! bq40z50_tests {
                 bq.device.interface.i2c.done();
             }
 
-            #[cfg(not(any(feature = "r1", feature = "r3")))]
+            #[cfg(not(any(feature = "r1", feature = "r2", feature = "r3")))]
             #[tokio::test]
             async fn test_read_mfg_info_c() {
                 let expectations = vec![
@@ -445,7 +445,7 @@ macro_rules! bq40z50_tests {
                 bq.device.interface.i2c.done();
             }
 
-            #[cfg(not(any(feature = "r1", feature = "r3")))]
+            #[cfg(not(any(feature = "r1", feature = "r2", feature = "r3")))]
             #[tokio::test]
             async fn test_read_mfg_info_c_pec() {
                 let expectations = vec![
