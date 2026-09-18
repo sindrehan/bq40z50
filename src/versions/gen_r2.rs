@@ -3468,9 +3468,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 12, 13) };
             raw > 0
         }
-        ///Read the `ascdl` field of the register.
+        ///Read the `aoldl` field of the register.
         ///
-        pub fn ascdl(&self) -> bool {
+        pub fn aoldl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 13, 14) };
             raw > 0
         }
@@ -3480,9 +3480,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 14, 15) };
             raw > 0
         }
-        ///Read the `aoldl` field of the register.
+        ///Read the `ascdl` field of the register.
         ///
-        pub fn aoldl(&self) -> bool {
+        pub fn ascdl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 15, 16) };
             raw > 0
         }
@@ -3630,9 +3630,9 @@ pub mod field_sets {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 12, 13, &mut self.bits) };
         }
-        ///Write the `ascdl` field of the register.
+        ///Write the `aoldl` field of the register.
         ///
-        pub fn set_ascdl(&mut self, value: bool) {
+        pub fn set_aoldl(&mut self, value: bool) {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 13, 14, &mut self.bits) };
         }
@@ -3642,9 +3642,9 @@ pub mod field_sets {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 14, 15, &mut self.bits) };
         }
-        ///Write the `aoldl` field of the register.
+        ///Write the `ascdl` field of the register.
         ///
-        pub fn set_aoldl(&mut self, value: bool) {
+        pub fn set_ascdl(&mut self, value: bool) {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 15, 16, &mut self.bits) };
         }
@@ -3741,9 +3741,9 @@ pub mod field_sets {
             d.field("cd", &self.cd());
             d.field("vimr", &self.vimr());
             d.field("vima", &self.vima());
-            d.field("ascdl", &self.ascdl());
-            d.field("asccl", &self.asccl());
             d.field("aoldl", &self.aoldl());
+            d.field("asccl", &self.asccl());
+            d.field("ascdl", &self.ascdl());
             d.field("cfetf", &self.cfetf());
             d.field("dfetf", &self.dfetf());
             d.field("ocdl", &self.ocdl());
@@ -3775,9 +3775,9 @@ pub mod field_sets {
             defmt::write!(f, "cd: {=bool}, ", &self.cd());
             defmt::write!(f, "vimr: {=bool}, ", &self.vimr());
             defmt::write!(f, "vima: {=bool}, ", &self.vima());
-            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
-            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
             defmt::write!(f, "aoldl: {=bool}, ", &self.aoldl());
+            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
+            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
             defmt::write!(f, "cfetf: {=bool}, ", &self.cfetf());
             defmt::write!(f, "dfetf: {=bool}, ", &self.dfetf());
             defmt::write!(f, "ocdl: {=bool}, ", &self.ocdl());
@@ -3947,9 +3947,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 12, 13) };
             raw > 0
         }
-        ///Read the `ascdl` field of the register.
+        ///Read the `aoldl` field of the register.
         ///
-        pub fn ascdl(&self) -> bool {
+        pub fn aoldl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 13, 14) };
             raw > 0
         }
@@ -3959,9 +3959,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 14, 15) };
             raw > 0
         }
-        ///Read the `aoldl` field of the register.
+        ///Read the `ascdl` field of the register.
         ///
-        pub fn aoldl(&self) -> bool {
+        pub fn ascdl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 15, 16) };
             raw > 0
         }
@@ -4127,9 +4127,9 @@ pub mod field_sets {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 12, 13, &mut self.bits) };
         }
-        ///Write the `ascdl` field of the register.
+        ///Write the `aoldl` field of the register.
         ///
-        pub fn set_ascdl(&mut self, value: bool) {
+        pub fn set_aoldl(&mut self, value: bool) {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 13, 14, &mut self.bits) };
         }
@@ -4139,9 +4139,9 @@ pub mod field_sets {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 14, 15, &mut self.bits) };
         }
-        ///Write the `aoldl` field of the register.
+        ///Write the `ascdl` field of the register.
         ///
-        pub fn set_aoldl(&mut self, value: bool) {
+        pub fn set_ascdl(&mut self, value: bool) {
             let raw = value as _;
             unsafe { ::device_driver::ops::store_lsb0::<u8, ::device_driver::ops::LE>(raw, 15, 16, &mut self.bits) };
         }
@@ -4256,9 +4256,9 @@ pub mod field_sets {
             d.field("cd", &self.cd());
             d.field("vimr", &self.vimr());
             d.field("vima", &self.vima());
-            d.field("ascdl", &self.ascdl());
-            d.field("asccl", &self.asccl());
             d.field("aoldl", &self.aoldl());
+            d.field("asccl", &self.asccl());
+            d.field("ascdl", &self.ascdl());
             d.field("cfetf", &self.cfetf());
             d.field("dfetf", &self.dfetf());
             d.field("ocdl", &self.ocdl());
@@ -4293,9 +4293,9 @@ pub mod field_sets {
             defmt::write!(f, "cd: {=bool}, ", &self.cd());
             defmt::write!(f, "vimr: {=bool}, ", &self.vimr());
             defmt::write!(f, "vima: {=bool}, ", &self.vima());
-            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
-            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
             defmt::write!(f, "aoldl: {=bool}, ", &self.aoldl());
+            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
+            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
             defmt::write!(f, "cfetf: {=bool}, ", &self.cfetf());
             defmt::write!(f, "dfetf: {=bool}, ", &self.dfetf());
             defmt::write!(f, "ocdl: {=bool}, ", &self.ocdl());
@@ -15407,9 +15407,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 12, 13) };
             raw > 0
         }
-        ///Read the `ascdl` field of the register.
+        ///Read the `aoldl` field of the register.
         ///
-        pub fn ascdl(&self) -> bool {
+        pub fn aoldl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 13, 14) };
             raw > 0
         }
@@ -15419,9 +15419,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 14, 15) };
             raw > 0
         }
-        ///Read the `aoldl` field of the register.
+        ///Read the `ascdl` field of the register.
         ///
-        pub fn aoldl(&self) -> bool {
+        pub fn ascdl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 15, 16) };
             raw > 0
         }
@@ -15518,9 +15518,9 @@ pub mod field_sets {
             d.field("cd", &self.cd());
             d.field("vimr", &self.vimr());
             d.field("vima", &self.vima());
-            d.field("ascdl", &self.ascdl());
-            d.field("asccl", &self.asccl());
             d.field("aoldl", &self.aoldl());
+            d.field("asccl", &self.asccl());
+            d.field("ascdl", &self.ascdl());
             d.field("cfetf", &self.cfetf());
             d.field("dfetf", &self.dfetf());
             d.field("ocdl", &self.ocdl());
@@ -15552,9 +15552,9 @@ pub mod field_sets {
             defmt::write!(f, "cd: {=bool}, ", &self.cd());
             defmt::write!(f, "vimr: {=bool}, ", &self.vimr());
             defmt::write!(f, "vima: {=bool}, ", &self.vima());
-            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
-            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
             defmt::write!(f, "aoldl: {=bool}, ", &self.aoldl());
+            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
+            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
             defmt::write!(f, "cfetf: {=bool}, ", &self.cfetf());
             defmt::write!(f, "dfetf: {=bool}, ", &self.dfetf());
             defmt::write!(f, "ocdl: {=bool}, ", &self.ocdl());
@@ -15724,9 +15724,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 12, 13) };
             raw > 0
         }
-        ///Read the `ascdl` field of the register.
+        ///Read the `aoldl` field of the register.
         ///
-        pub fn ascdl(&self) -> bool {
+        pub fn aoldl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 13, 14) };
             raw > 0
         }
@@ -15736,9 +15736,9 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 14, 15) };
             raw > 0
         }
-        ///Read the `aoldl` field of the register.
+        ///Read the `ascdl` field of the register.
         ///
-        pub fn aoldl(&self) -> bool {
+        pub fn ascdl(&self) -> bool {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u8, ::device_driver::ops::LE>(&self.bits, 15, 16) };
             raw > 0
         }
@@ -15853,9 +15853,9 @@ pub mod field_sets {
             d.field("cd", &self.cd());
             d.field("vimr", &self.vimr());
             d.field("vima", &self.vima());
-            d.field("ascdl", &self.ascdl());
-            d.field("asccl", &self.asccl());
             d.field("aoldl", &self.aoldl());
+            d.field("asccl", &self.asccl());
+            d.field("ascdl", &self.ascdl());
             d.field("cfetf", &self.cfetf());
             d.field("dfetf", &self.dfetf());
             d.field("ocdl", &self.ocdl());
@@ -15890,9 +15890,9 @@ pub mod field_sets {
             defmt::write!(f, "cd: {=bool}, ", &self.cd());
             defmt::write!(f, "vimr: {=bool}, ", &self.vimr());
             defmt::write!(f, "vima: {=bool}, ", &self.vima());
-            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
-            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
             defmt::write!(f, "aoldl: {=bool}, ", &self.aoldl());
+            defmt::write!(f, "asccl: {=bool}, ", &self.asccl());
+            defmt::write!(f, "ascdl: {=bool}, ", &self.ascdl());
             defmt::write!(f, "cfetf: {=bool}, ", &self.cfetf());
             defmt::write!(f, "dfetf: {=bool}, ", &self.dfetf());
             defmt::write!(f, "ocdl: {=bool}, ", &self.ocdl());

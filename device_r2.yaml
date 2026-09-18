@@ -426,13 +426,13 @@ MAC_PF_ALERT:
     VIMA:
       base: bool
       start: 12
-    ASCDL:
+    AOLDL:
       base: bool
       start: 13
     ASCCL:
       base: bool
       start: 14
-    AOLDL:
+    ASCDL:
       base: bool
       start: 15
     CFETF:
@@ -513,13 +513,13 @@ MAC_PF_STATUS:
     VIMA:
       base: bool
       start: 12
-    ASCDL:
+    AOLDL:
       base: bool
       start: 13
     ASCCL:
       base: bool
       start: 14
-    AOLDL:
+    ASCDL:
       base: bool
       start: 15
     CFETF:
@@ -2615,7 +2615,7 @@ PF_ALERT:
       base: bool
       access: RO
       start: 12
-    ASCDL:
+    AOLDL:
       base: bool
       access: RO
       start: 13
@@ -2623,7 +2623,7 @@ PF_ALERT:
       base: bool
       access: RO
       start: 14
-    AOLDL:
+    ASCDL:
       base: bool
       access: RO
       start: 15
@@ -2730,7 +2730,7 @@ PF_STATUS:
       base: bool
       access: RO
       start: 12
-    ASCDL:
+    AOLDL:
       base: bool
       access: RO
       start: 13
@@ -2738,7 +2738,7 @@ PF_STATUS:
       base: bool
       access: RO
       start: 14
-    AOLDL:
+    ASCDL:
       base: bool
       access: RO
       start: 15
