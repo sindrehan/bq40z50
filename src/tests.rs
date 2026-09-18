@@ -421,6 +421,52 @@ macro_rules! bq40z50_tests {
                 bq.device.interface.i2c.done();
             }
 
+            // Only when the test module is instantiated for R2 alone: the macro is expanded once per enabled
+            // revision and only Bq40z50R2 has write_temperature().
+            #[cfg(all(
+                feature = "r2",
+                not(any(feature = "r1", feature = "r3", feature = "r4", feature = "r5"))
+            ))]
+            #[tokio::test]
+            async fn test_write_temperature() {
+                // WRITE_TEMP (0x3008) with 298.1 K (25 degC): [0x44, len, cmd LSB, cmd MSB, temp LSB, temp MSB]
+                let expectations = vec![Transaction::write(
+                    BQ_ADDR,
+                    vec![0x44, 0x04, 0x08, 0x30, 0xA5, 0x0B],
+                )];
+                let i2c = Mock::new(&expectations);
+                let mut bq = Bq40z50::new(i2c, NoopDelay::new());
+
+                bq.write_temperature(2981).await.unwrap();
+
+                bq.device.interface.i2c.done();
+            }
+
+            #[cfg(all(
+                feature = "r2",
+                not(any(feature = "r1", feature = "r3", feature = "r4", feature = "r5"))
+            ))]
+            #[tokio::test]
+            async fn test_write_temperature_pec() {
+                let expectations = vec![Transaction::write(
+                    BQ_ADDR,
+                    vec![0x44, 0x04, 0x08, 0x30, 0xA5, 0x0B, 0x7B],
+                )];
+                let i2c = Mock::new(&expectations);
+                let mut bq = Bq40z50::new_with_config(
+                    i2c,
+                    NoopDelay::new(),
+                    Config {
+                        pec_write: true,
+                        ..Default::default()
+                    },
+                );
+
+                bq.write_temperature(2981).await.unwrap();
+
+                bq.device.interface.i2c.done();
+            }
+
             #[cfg(not(any(feature = "r1", feature = "r2", feature = "r3")))]
             #[tokio::test]
             async fn test_read_mfg_info_c() {

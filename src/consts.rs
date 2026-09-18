@@ -24,6 +24,11 @@ pub(crate) const CHRG_VOLTAGE_OVERRIDE_CMD: [u8; MAC_CMD_ADDR_SIZE_BYTES as usiz
 #[cfg(any(feature = "r3", feature = "r4", feature = "r5"))]
 pub(crate) const CHRG_VOLTAGE_OVERRIDE_SIZE_BYTES: u8 = 10;
 
+#[cfg(feature = "r2")]
+pub(crate) const WRITE_TEMP_CMD: [u8; MAC_CMD_ADDR_SIZE_BYTES as usize] = 0x3008u16.to_le_bytes();
+#[cfg(feature = "r2")]
+pub(crate) const WRITE_TEMP_SIZE_BYTES: u8 = 2;
+
 pub(crate) const DEFAULT_BUS_RETRIES: usize = 3;
 pub(crate) const DEFAULT_ERROR_BACKOFF_DELAY_MS: u32 = 10;
 #[cfg(feature = "embassy-timeout")]

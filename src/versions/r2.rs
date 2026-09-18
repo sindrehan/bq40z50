@@ -7,6 +7,7 @@ use crate::common::{CapacityModeState, Config};
 use crate::consts::{
     AUTH_KEY_CMD, AUTH_KEY_DATA_LEN_BYTES, AUTH_KEY_LEN_BYTES, LARGEST_REG_SIZE_BYTES, MAC_CMD,
     MAC_CMD_ADDR_SIZE_BYTES, MFG_INFO_CMD, SECURITY_KEYS_CMD, SECURITY_KEYS_DATA_LEN_BYTES, SECURITY_KEYS_LEN_BYTES,
+    WRITE_TEMP_CMD, WRITE_TEMP_SIZE_BYTES,
 };
 use crate::error::BQ40Z50Error;
 use crate::interface::DeviceInterface;
@@ -352,6 +353,31 @@ impl<I2C: I2cTrait, DELAY: DelayTrait> Bq40z50R2<I2C, DELAY> {
                 .mac_read_from_df_with_retries(starting_address, read)
                 .await
         }
+    }
+
+    /// Write the cell temperature via the `WRITE_TEMP` MAC command (0x3008).
+    ///
+    /// Only has an effect when `[SMB_CELL_TEMP]` is set in the SBS Configuration data flash register;
+    /// the gauge then ignores its TS1 through TS3 inputs and uses this value instead.
+    /// Available in SEALED and UNSEALED mode.
+    ///
+    /// `temperature_deci_kelvin` is in units of 0.1 K, the same unit as `Temperature()`.
+    /// # Errors
+    ///
+    /// Will return `Err` if an I2C bus error occurs.
+    pub async fn write_temperature(&mut self, temperature_deci_kelvin: u16) -> Result<(), BQ40Z50Error<I2C::Error>> {
+        let mut buf = [0u8; 2 + MAC_CMD_ADDR_SIZE_BYTES as usize + WRITE_TEMP_SIZE_BYTES as usize];
+
+        buf[0] = MAC_CMD;
+        buf[1] = WRITE_TEMP_SIZE_BYTES + MAC_CMD_ADDR_SIZE_BYTES;
+        buf[2] = WRITE_TEMP_CMD[0];
+        buf[3] = WRITE_TEMP_CMD[1];
+        buf[4..6].copy_from_slice(&temperature_deci_kelvin.to_le_bytes());
+
+        self.device
+            .interface
+            .mac_write_with_retries(&buf, self.device.interface.config.pec_write)
+            .await
     }
 
     /// Write to the data flash (DF). Refer to the datasheet for the data flash table.
