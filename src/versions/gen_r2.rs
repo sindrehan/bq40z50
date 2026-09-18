@@ -570,6 +570,19 @@ impl<I> Device<I> {
             address as u32,
         )
     }
+    /// NoLoadRemCap(): the equivalent of RemainingCapacity() under a no-load
+    /// condition, in mAh. RemainingCapacity() is compensated for the load
+    /// selected by Load Select; this value better represents the capacity
+    /// available when only powering the RTC circuit.
+    pub fn mac_no_load_rem_cap(
+        &mut self,
+    ) -> ::device_driver::CommandOperation<'_, I, u32, (), field_sets::MacNoLoadRemCapFieldsOut> {
+        let address = self.base_address + 4479488;
+        ::device_driver::CommandOperation::<'_, I, u32, (), field_sets::MacNoLoadRemCapFieldsOut>::new(
+            self.interface(),
+            address as u32,
+        )
+    }
     pub fn mac_lifetime_data_block_1(
         &mut self,
     ) -> ::device_driver::CommandOperation<'_, I, u32, (), field_sets::MacLifetimeDataBlock1FieldsOut> {
@@ -696,27 +709,42 @@ impl<I> Device<I> {
             address as u32,
         )
     }
-    pub fn mac_no_load_rem_cap(
-        &mut self,
-    ) -> ::device_driver::CommandOperation<'_, I, u32, (), field_sets::MacNoLoadRemCapFieldsOut> {
-        let address = self.base_address + 4479488;
-        ::device_driver::CommandOperation::<'_, I, u32, (), field_sets::MacNoLoadRemCapFieldsOut>::new(
-            self.interface(),
-            address as u32,
-        )
-    }
+    /// RSOC_WRITE: loads a specific value into RSOC. Typically used for
+    /// testing; a subsequent IT simulation can overwrite the value. Only
+    /// works in UNSEALED mode, with or without smoothing enabled.
+    ///
+    /// The TRM does not document the format of the RSOC payload that
+    /// accompanies this command, so this definition only sends the command
+    /// word.
     pub fn mac_rsoc_write(&mut self) -> ::device_driver::CommandOperation<'_, I, u32, (), ()> {
         let address = self.base_address + 4487424;
         ::device_driver::CommandOperation::<'_, I, u32, (), ()>::new(self.interface(), address as u32)
     }
+    /// ManufacturerInfoB: returns the 4 bytes of ManufacturerInfo2 on
+    /// ManufacturerBlockAccess() or ManufacturerData().
+    pub fn mac_manufacture_info_b(
+        &mut self,
+    ) -> ::device_driver::CommandOperation<'_, I, u32, (), field_sets::MacManufactureInfoBFieldsOut> {
+        let address = self.base_address + 4487680;
+        ::device_driver::CommandOperation::<'_, I, u32, (), field_sets::MacManufactureInfoBFieldsOut>::new(
+            self.interface(),
+            address as u32,
+        )
+    }
+    /// IATA_SHUTDOWN: used together with the IATA_SHUT bit in the IATA Flag
+    /// register to let the gauge enter IATA shutdown, provided the other
+    /// requirements are met.
     pub fn mac_iata_shutdown(&mut self) -> ::device_driver::CommandOperation<'_, I, u32, (), ()> {
         let address = self.base_address + 4517888;
         ::device_driver::CommandOperation::<'_, I, u32, (), ()>::new(self.interface(), address as u32)
     }
+    /// IATA_RM: used in relation to IATA to read out the stored IATA_RM value.
     pub fn mac_iata_rm(&mut self) -> ::device_driver::CommandOperation<'_, I, u32, (), ()> {
         let address = self.base_address + 4518144;
         ::device_driver::CommandOperation::<'_, I, u32, (), ()>::new(self.interface(), address as u32)
     }
+    /// IATA_FCC: used in relation to IATA to read out the stored IATA_FCC
+    /// value.
     pub fn mac_iata_fcc(&mut self) -> ::device_driver::CommandOperation<'_, I, u32, (), ()> {
         let address = self.base_address + 4518400;
         ::device_driver::CommandOperation::<'_, I, u32, (), ()>::new(self.interface(), address as u32)
@@ -6252,6 +6280,125 @@ pub mod field_sets {
             self
         }
     }
+    /// NoLoadRemCap(): the equivalent of RemainingCapacity() under a no-load
+    /// condition, in mAh. RemainingCapacity() is compensated for the load
+    /// selected by Load Select; this value better represents the capacity
+    /// available when only powering the RTC circuit.
+    #[derive(Copy, Clone, Eq, PartialEq)]
+    pub struct MacNoLoadRemCapFieldsOut {
+        /// The internal bits
+        bits: [u8; 2],
+    }
+    impl ::device_driver::FieldSet for MacNoLoadRemCapFieldsOut {
+        const SIZE_BITS: u32 = 16;
+        fn new_with_zero() -> Self {
+            Self::new_zero()
+        }
+        fn get_inner_buffer(&self) -> &[u8] {
+            &self.bits
+        }
+        fn get_inner_buffer_mut(&mut self) -> &mut [u8] {
+            &mut self.bits
+        }
+    }
+    impl MacNoLoadRemCapFieldsOut {
+        /// Create a new instance, loaded with the reset value (if any)
+        pub const fn new() -> Self {
+            Self { bits: [0, 0] }
+        }
+        /// Create a new instance, loaded with all zeroes
+        pub const fn new_zero() -> Self {
+            Self { bits: [0; 2] }
+        }
+        ///Read the `remaining_capacity` field of the register.
+        ///
+        pub fn remaining_capacity(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 0, 16) };
+            raw
+        }
+        ///Write the `remaining_capacity` field of the register.
+        ///
+        pub fn set_remaining_capacity(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 0, 16, &mut self.bits) };
+        }
+    }
+    impl From<[u8; 2]> for MacNoLoadRemCapFieldsOut {
+        fn from(bits: [u8; 2]) -> Self {
+            Self { bits }
+        }
+    }
+    impl From<MacNoLoadRemCapFieldsOut> for [u8; 2] {
+        fn from(val: MacNoLoadRemCapFieldsOut) -> Self {
+            val.bits
+        }
+    }
+    impl core::fmt::Debug for MacNoLoadRemCapFieldsOut {
+        fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> Result<(), core::fmt::Error> {
+            let mut d = f.debug_struct("MacNoLoadRemCapFieldsOut");
+            d.field("remaining_capacity", &self.remaining_capacity());
+            d.finish()
+        }
+    }
+    #[cfg(feature = "defmt-03")]
+    impl defmt::Format for MacNoLoadRemCapFieldsOut {
+        fn format(&self, f: defmt::Formatter) {
+            defmt::write!(f, "MacNoLoadRemCapFieldsOut {{ ");
+            defmt::write!(f, "remaining_capacity: {=u16}, ", &self.remaining_capacity());
+            defmt::write!(f, "}}");
+        }
+    }
+    impl core::ops::BitAnd for MacNoLoadRemCapFieldsOut {
+        type Output = Self;
+        fn bitand(mut self, rhs: Self) -> Self::Output {
+            self &= rhs;
+            self
+        }
+    }
+    impl core::ops::BitAndAssign for MacNoLoadRemCapFieldsOut {
+        fn bitand_assign(&mut self, rhs: Self) {
+            for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
+                *l &= *r;
+            }
+        }
+    }
+    impl core::ops::BitOr for MacNoLoadRemCapFieldsOut {
+        type Output = Self;
+        fn bitor(mut self, rhs: Self) -> Self::Output {
+            self |= rhs;
+            self
+        }
+    }
+    impl core::ops::BitOrAssign for MacNoLoadRemCapFieldsOut {
+        fn bitor_assign(&mut self, rhs: Self) {
+            for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
+                *l |= *r;
+            }
+        }
+    }
+    impl core::ops::BitXor for MacNoLoadRemCapFieldsOut {
+        type Output = Self;
+        fn bitxor(mut self, rhs: Self) -> Self::Output {
+            self ^= rhs;
+            self
+        }
+    }
+    impl core::ops::BitXorAssign for MacNoLoadRemCapFieldsOut {
+        fn bitxor_assign(&mut self, rhs: Self) {
+            for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
+                *l ^= *r;
+            }
+        }
+    }
+    impl core::ops::Not for MacNoLoadRemCapFieldsOut {
+        type Output = Self;
+        fn not(mut self) -> Self::Output {
+            for val in self.bits.iter_mut() {
+                *val = !*val;
+            }
+            self
+        }
+    }
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct MacLifetimeDataBlock1FieldsOut {
         /// The internal bits
@@ -9918,13 +10065,15 @@ pub mod field_sets {
             self
         }
     }
+    /// ManufacturerInfoB: returns the 4 bytes of ManufacturerInfo2 on
+    /// ManufacturerBlockAccess() or ManufacturerData().
     #[derive(Copy, Clone, Eq, PartialEq)]
-    pub struct MacNoLoadRemCapFieldsOut {
+    pub struct MacManufactureInfoBFieldsOut {
         /// The internal bits
-        bits: [u8; 2],
+        bits: [u8; 4],
     }
-    impl ::device_driver::FieldSet for MacNoLoadRemCapFieldsOut {
-        const SIZE_BITS: u32 = 16;
+    impl ::device_driver::FieldSet for MacManufactureInfoBFieldsOut {
+        const SIZE_BITS: u32 = 32;
         fn new_with_zero() -> Self {
             Self::new_zero()
         }
@@ -9935,96 +10084,96 @@ pub mod field_sets {
             &mut self.bits
         }
     }
-    impl MacNoLoadRemCapFieldsOut {
+    impl MacManufactureInfoBFieldsOut {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
-            Self { bits: [0, 0] }
+            Self { bits: [0, 0, 0, 0] }
         }
         /// Create a new instance, loaded with all zeroes
         pub const fn new_zero() -> Self {
-            Self { bits: [0; 2] }
+            Self { bits: [0; 4] }
         }
-        ///Read the `remaining_capacity` field of the register.
+        ///Read the `manufacture_info_b` field of the register.
         ///
-        pub fn remaining_capacity(&self) -> u16 {
-            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 0, 16) };
+        pub fn manufacture_info_b(&self) -> u32 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u32, ::device_driver::ops::LE>(&self.bits, 0, 32) };
             raw
         }
-        ///Write the `remaining_capacity` field of the register.
+        ///Write the `manufacture_info_b` field of the register.
         ///
-        pub fn set_remaining_capacity(&mut self, value: u16) {
+        pub fn set_manufacture_info_b(&mut self, value: u32) {
             let raw = value;
-            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 0, 16, &mut self.bits) };
+            unsafe { ::device_driver::ops::store_lsb0::<u32, ::device_driver::ops::LE>(raw, 0, 32, &mut self.bits) };
         }
     }
-    impl From<[u8; 2]> for MacNoLoadRemCapFieldsOut {
-        fn from(bits: [u8; 2]) -> Self {
+    impl From<[u8; 4]> for MacManufactureInfoBFieldsOut {
+        fn from(bits: [u8; 4]) -> Self {
             Self { bits }
         }
     }
-    impl From<MacNoLoadRemCapFieldsOut> for [u8; 2] {
-        fn from(val: MacNoLoadRemCapFieldsOut) -> Self {
+    impl From<MacManufactureInfoBFieldsOut> for [u8; 4] {
+        fn from(val: MacManufactureInfoBFieldsOut) -> Self {
             val.bits
         }
     }
-    impl core::fmt::Debug for MacNoLoadRemCapFieldsOut {
+    impl core::fmt::Debug for MacManufactureInfoBFieldsOut {
         fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> Result<(), core::fmt::Error> {
-            let mut d = f.debug_struct("MacNoLoadRemCapFieldsOut");
-            d.field("remaining_capacity", &self.remaining_capacity());
+            let mut d = f.debug_struct("MacManufactureInfoBFieldsOut");
+            d.field("manufacture_info_b", &self.manufacture_info_b());
             d.finish()
         }
     }
     #[cfg(feature = "defmt-03")]
-    impl defmt::Format for MacNoLoadRemCapFieldsOut {
+    impl defmt::Format for MacManufactureInfoBFieldsOut {
         fn format(&self, f: defmt::Formatter) {
-            defmt::write!(f, "MacNoLoadRemCapFieldsOut {{ ");
-            defmt::write!(f, "remaining_capacity: {=u16}, ", &self.remaining_capacity());
+            defmt::write!(f, "MacManufactureInfoBFieldsOut {{ ");
+            defmt::write!(f, "manufacture_info_b: {=u32}, ", &self.manufacture_info_b());
             defmt::write!(f, "}}");
         }
     }
-    impl core::ops::BitAnd for MacNoLoadRemCapFieldsOut {
+    impl core::ops::BitAnd for MacManufactureInfoBFieldsOut {
         type Output = Self;
         fn bitand(mut self, rhs: Self) -> Self::Output {
             self &= rhs;
             self
         }
     }
-    impl core::ops::BitAndAssign for MacNoLoadRemCapFieldsOut {
+    impl core::ops::BitAndAssign for MacManufactureInfoBFieldsOut {
         fn bitand_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l &= *r;
             }
         }
     }
-    impl core::ops::BitOr for MacNoLoadRemCapFieldsOut {
+    impl core::ops::BitOr for MacManufactureInfoBFieldsOut {
         type Output = Self;
         fn bitor(mut self, rhs: Self) -> Self::Output {
             self |= rhs;
             self
         }
     }
-    impl core::ops::BitOrAssign for MacNoLoadRemCapFieldsOut {
+    impl core::ops::BitOrAssign for MacManufactureInfoBFieldsOut {
         fn bitor_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l |= *r;
             }
         }
     }
-    impl core::ops::BitXor for MacNoLoadRemCapFieldsOut {
+    impl core::ops::BitXor for MacManufactureInfoBFieldsOut {
         type Output = Self;
         fn bitxor(mut self, rhs: Self) -> Self::Output {
             self ^= rhs;
             self
         }
     }
-    impl core::ops::BitXorAssign for MacNoLoadRemCapFieldsOut {
+    impl core::ops::BitXorAssign for MacManufactureInfoBFieldsOut {
         fn bitxor_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l ^= *r;
             }
         }
     }
-    impl core::ops::Not for MacNoLoadRemCapFieldsOut {
+    impl core::ops::Not for MacManufactureInfoBFieldsOut {
         type Output = Self;
         fn not(mut self) -> Self::Output {
             for val in self.bits.iter_mut() {
@@ -20675,6 +20824,11 @@ pub mod field_sets {
         MacGaugingStatusFieldsOut(MacGaugingStatusFieldsOut),
         MacManufacturingStatusFieldsOut(MacManufacturingStatusFieldsOut),
         MacAfeRegFieldsOut(MacAfeRegFieldsOut),
+        /// NoLoadRemCap(): the equivalent of RemainingCapacity() under a no-load
+        /// condition, in mAh. RemainingCapacity() is compensated for the load
+        /// selected by Load Select; this value better represents the capacity
+        /// available when only powering the RTC circuit.
+        MacNoLoadRemCapFieldsOut(MacNoLoadRemCapFieldsOut),
         MacLifetimeDataBlock1FieldsOut(MacLifetimeDataBlock1FieldsOut),
         MacLifetimeDataBlock2FieldsOut(MacLifetimeDataBlock2FieldsOut),
         MacLifetimeDataBlock3FieldsOut(MacLifetimeDataBlock3FieldsOut),
@@ -20689,7 +20843,9 @@ pub mod field_sets {
         MacCbStatusFieldsOut(MacCbStatusFieldsOut),
         MacStateOfHealthFieldsOut(MacStateOfHealthFieldsOut),
         MacFilterCapacityFieldsOut(MacFilterCapacityFieldsOut),
-        MacNoLoadRemCapFieldsOut(MacNoLoadRemCapFieldsOut),
+        /// ManufacturerInfoB: returns the 4 bytes of ManufacturerInfo2 on
+        /// ManufacturerBlockAccess() or ManufacturerData().
+        MacManufactureInfoBFieldsOut(MacManufactureInfoBFieldsOut),
         MacOutputCcadcCalFieldsOut(MacOutputCcadcCalFieldsOut),
         MacOutputShortedCcadcCalFieldsOut(MacOutputShortedCcadcCalFieldsOut),
         /// This read/write word function sets a low capacity alarm threshold for the cell stack.
@@ -20788,6 +20944,7 @@ pub mod field_sets {
                 Self::MacGaugingStatusFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacManufacturingStatusFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacAfeRegFieldsOut(val) => core::fmt::Debug::fmt(val, f),
+                Self::MacNoLoadRemCapFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacLifetimeDataBlock1FieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacLifetimeDataBlock2FieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacLifetimeDataBlock3FieldsOut(val) => core::fmt::Debug::fmt(val, f),
@@ -20802,7 +20959,7 @@ pub mod field_sets {
                 Self::MacCbStatusFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacStateOfHealthFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacFilterCapacityFieldsOut(val) => core::fmt::Debug::fmt(val, f),
-                Self::MacNoLoadRemCapFieldsOut(val) => core::fmt::Debug::fmt(val, f),
+                Self::MacManufactureInfoBFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacOutputCcadcCalFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::MacOutputShortedCcadcCalFieldsOut(val) => core::fmt::Debug::fmt(val, f),
                 Self::RemainingCapacityAlarm(val) => core::fmt::Debug::fmt(val, f),
@@ -20895,6 +21052,7 @@ pub mod field_sets {
                 Self::MacGaugingStatusFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacManufacturingStatusFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacAfeRegFieldsOut(val) => defmt::Format::format(val, f),
+                Self::MacNoLoadRemCapFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacLifetimeDataBlock1FieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacLifetimeDataBlock2FieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacLifetimeDataBlock3FieldsOut(val) => defmt::Format::format(val, f),
@@ -20909,7 +21067,7 @@ pub mod field_sets {
                 Self::MacCbStatusFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacStateOfHealthFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacFilterCapacityFieldsOut(val) => defmt::Format::format(val, f),
-                Self::MacNoLoadRemCapFieldsOut(val) => defmt::Format::format(val, f),
+                Self::MacManufactureInfoBFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacOutputCcadcCalFieldsOut(val) => defmt::Format::format(val, f),
                 Self::MacOutputShortedCcadcCalFieldsOut(val) => defmt::Format::format(val, f),
                 Self::RemainingCapacityAlarm(val) => defmt::Format::format(val, f),
@@ -21064,6 +21222,11 @@ pub mod field_sets {
             Self::MacAfeRegFieldsOut(val)
         }
     }
+    impl From<MacNoLoadRemCapFieldsOut> for FieldSetValue {
+        fn from(val: MacNoLoadRemCapFieldsOut) -> Self {
+            Self::MacNoLoadRemCapFieldsOut(val)
+        }
+    }
     impl From<MacLifetimeDataBlock1FieldsOut> for FieldSetValue {
         fn from(val: MacLifetimeDataBlock1FieldsOut) -> Self {
             Self::MacLifetimeDataBlock1FieldsOut(val)
@@ -21134,9 +21297,9 @@ pub mod field_sets {
             Self::MacFilterCapacityFieldsOut(val)
         }
     }
-    impl From<MacNoLoadRemCapFieldsOut> for FieldSetValue {
-        fn from(val: MacNoLoadRemCapFieldsOut) -> Self {
-            Self::MacNoLoadRemCapFieldsOut(val)
+    impl From<MacManufactureInfoBFieldsOut> for FieldSetValue {
+        fn from(val: MacManufactureInfoBFieldsOut) -> Self {
+            Self::MacManufactureInfoBFieldsOut(val)
         }
     }
     impl From<MacOutputCcadcCalFieldsOut> for FieldSetValue {

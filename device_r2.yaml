@@ -914,6 +914,21 @@ MAC_AFE_REG:
       start: 160
       end: 168
 
+MAC_NO_LOAD_REM_CAP:
+  type: command
+  address: 0x445A00
+  size_bits_out: 16
+  fields_out:
+    REMAINING_CAPACITY:
+      base: uint
+      start: 0
+      end: 16
+  description: |
+    NoLoadRemCap(): the equivalent of RemainingCapacity() under a no-load
+    condition, in mAh. RemainingCapacity() is compensated for the load
+    selected by Load Select; this value better represents the capacity
+    available when only powering the RTC circuit.
+
 MAC_LIFETIME_DATA_BLOCK_1:
   type: command
   address: 0x446000
@@ -1634,31 +1649,51 @@ MAC_FILTER_CAPACITY:
       start: 48
       end: 64
 
-MAC_NO_LOAD_REM_CAP:
-  type: command
-  address: 0x445A00
-  size_bits_out: 16
-  fields_out:
-    REMAINING_CAPACITY:
-      base: uint
-      start: 0
-      end: 16
-
 MAC_RSOC_WRITE:
   type: command
   address: 0x447900
+  description: |
+    RSOC_WRITE: loads a specific value into RSOC. Typically used for
+    testing; a subsequent IT simulation can overwrite the value. Only
+    works in UNSEALED mode, with or without smoothing enabled.
+
+    The TRM does not document the format of the RSOC payload that
+    accompanies this command, so this definition only sends the command
+    word.
+
+MAC_MANUFACTURE_INFO_B:
+  type: command
+  address: 0x447A00
+  size_bits_out: 32
+  fields_out:
+    MANUFACTURE_INFO_B:
+      base: uint
+      start: 0
+      end: 32
+  description: |
+    ManufacturerInfoB: returns the 4 bytes of ManufacturerInfo2 on
+    ManufacturerBlockAccess() or ManufacturerData().
 
 MAC_IATA_SHUTDOWN:
   type: command
   address: 0x44F000
+  description: |
+    IATA_SHUTDOWN: used together with the IATA_SHUT bit in the IATA Flag
+    register to let the gauge enter IATA shutdown, provided the other
+    requirements are met.
 
 MAC_IATA_RM:
   type: command
   address: 0x44F100
+  description: |
+    IATA_RM: used in relation to IATA to read out the stored IATA_RM value.
 
 MAC_IATA_FCC:
   type: command
   address: 0x44F200
+  description: |
+    IATA_FCC: used in relation to IATA to read out the stored IATA_FCC
+    value.
 
 MAC_ROM_MODE:
   type: command
