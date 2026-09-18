@@ -32,6 +32,11 @@ jobs:
         uses: baptiste0928/cargo-install@v3
         with:
           crate: device-driver-cli
+          # Must match the device-driver major version used by the crate.
+          # device-driver-cli 2.x (August 2026) renamed the binary to `ddc`,
+          # dropped the YAML manifest format and changed the arguments, so
+          # an unpinned install breaks this check for every revision.
+          version: "1.0.9"
       - name: Generate files
         run: device-driver-cli --manifest device_${{ matrix.chip-rev }}.yaml --device-name Device -o ci_gen_${{matrix.chip-rev}}.rs
       - name: Format generated file with nightly rustfmt
