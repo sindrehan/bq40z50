@@ -127,10 +127,10 @@ impl<I> Device<I> {
         callback(87 + 0 * 0, "manufacturing_status", reg.into());
         let reg = self.afe_reg().read()?;
         callback(88 + 0 * 0, "afe_reg", reg.into());
-        let reg = self.turbo_power().read()?;
-        callback(89 + 0 * 0, "turbo_power", reg.into());
-        let reg = self.turbo_final().read()?;
-        callback(90 + 0 * 0, "turbo_final", reg.into());
+        let reg = self.max_turbo_power().read()?;
+        callback(89 + 0 * 0, "max_turbo_power", reg.into());
+        let reg = self.sus_turbo_power().read()?;
+        callback(90 + 0 * 0, "sus_turbo_power", reg.into());
         let reg = self.turbo_pack_r().read()?;
         callback(91 + 0 * 0, "turbo_pack_r", reg.into());
         let reg = self.turbo_sys_r().read()?;
@@ -139,6 +139,8 @@ impl<I> Device<I> {
         callback(93 + 0 * 0, "turbo_edv", reg.into());
         let reg = self.turbo_current().read()?;
         callback(94 + 0 * 0, "turbo_current", reg.into());
+        let reg = self.sus_turbo_current().read()?;
+        callback(95 + 0 * 0, "sus_turbo_current", reg.into());
         let reg = self.lifetime_data_block_1().read()?;
         callback(96 + 0 * 0, "lifetime_data_block_1", reg.into());
         let reg = self.lifetime_data_block_2().read()?;
@@ -277,10 +279,10 @@ impl<I> Device<I> {
         callback(87 + 0 * 0, "manufacturing_status", reg.into());
         let reg = self.afe_reg().read_async().await?;
         callback(88 + 0 * 0, "afe_reg", reg.into());
-        let reg = self.turbo_power().read_async().await?;
-        callback(89 + 0 * 0, "turbo_power", reg.into());
-        let reg = self.turbo_final().read_async().await?;
-        callback(90 + 0 * 0, "turbo_final", reg.into());
+        let reg = self.max_turbo_power().read_async().await?;
+        callback(89 + 0 * 0, "max_turbo_power", reg.into());
+        let reg = self.sus_turbo_power().read_async().await?;
+        callback(90 + 0 * 0, "sus_turbo_power", reg.into());
         let reg = self.turbo_pack_r().read_async().await?;
         callback(91 + 0 * 0, "turbo_pack_r", reg.into());
         let reg = self.turbo_sys_r().read_async().await?;
@@ -289,6 +291,8 @@ impl<I> Device<I> {
         callback(93 + 0 * 0, "turbo_edv", reg.into());
         let reg = self.turbo_current().read_async().await?;
         callback(94 + 0 * 0, "turbo_current", reg.into());
+        let reg = self.sus_turbo_current().read_async().await?;
+        callback(95 + 0 * 0, "sus_turbo_current", reg.into());
         let reg = self.lifetime_data_block_1().read_async().await?;
         callback(96 + 0 * 0, "lifetime_data_block_1", reg.into());
         let reg = self.lifetime_data_block_2().read_async().await?;
@@ -1213,24 +1217,28 @@ impl<I> Device<I> {
             field_sets::AfeReg::new,
         )
     }
-    pub fn turbo_power(
+    /// MaxTurboPwr(): the maximal peak power value for a 10-ms pulse occurring
+    /// on top of a 10-s 2 C-rate pulse, in cW.
+    pub fn max_turbo_power(
         &mut self,
-    ) -> ::device_driver::RegisterOperation<'_, I, u8, field_sets::TurboPower, ::device_driver::RW> {
+    ) -> ::device_driver::RegisterOperation<'_, I, u8, field_sets::MaxTurboPower, ::device_driver::RW> {
         let address = self.base_address + 89;
-        ::device_driver::RegisterOperation::<'_, I, u8, field_sets::TurboPower, ::device_driver::RW>::new(
+        ::device_driver::RegisterOperation::<'_, I, u8, field_sets::MaxTurboPower, ::device_driver::RW>::new(
             self.interface(),
             address as u8,
-            field_sets::TurboPower::new,
+            field_sets::MaxTurboPower::new,
         )
     }
-    pub fn turbo_final(
+    /// SusTurboPwr(): the maximal peak power value for a 10-s pulse (sustained
+    /// turbo power), in cW.
+    pub fn sus_turbo_power(
         &mut self,
-    ) -> ::device_driver::RegisterOperation<'_, I, u8, field_sets::TurboFinal, ::device_driver::RW> {
+    ) -> ::device_driver::RegisterOperation<'_, I, u8, field_sets::SusTurboPower, ::device_driver::RW> {
         let address = self.base_address + 90;
-        ::device_driver::RegisterOperation::<'_, I, u8, field_sets::TurboFinal, ::device_driver::RW>::new(
+        ::device_driver::RegisterOperation::<'_, I, u8, field_sets::SusTurboPower, ::device_driver::RW>::new(
             self.interface(),
             address as u8,
-            field_sets::TurboFinal::new,
+            field_sets::SusTurboPower::new,
         )
     }
     pub fn turbo_pack_r(
@@ -1263,6 +1271,8 @@ impl<I> Device<I> {
             field_sets::TurboEdv::new,
         )
     }
+    /// MaxTurboCurr(): the maximal peak current value (max turbo current), in
+    /// mA. The gauge computes a new value every second.
     pub fn turbo_current(
         &mut self,
     ) -> ::device_driver::RegisterOperation<'_, I, u8, field_sets::TurboCurrent, ::device_driver::RW> {
@@ -1271,6 +1281,19 @@ impl<I> Device<I> {
             self.interface(),
             address as u8,
             field_sets::TurboCurrent::new,
+        )
+    }
+    /// SusTurboCurr(): the sustained peak current value (sustained turbo
+    /// current), in mA. The gauge computes a new value every second. Not
+    /// available in SEALED mode.
+    pub fn sus_turbo_current(
+        &mut self,
+    ) -> ::device_driver::RegisterOperation<'_, I, u8, field_sets::SusTurboCurrent, ::device_driver::RW> {
+        let address = self.base_address + 95;
+        ::device_driver::RegisterOperation::<'_, I, u8, field_sets::SusTurboCurrent, ::device_driver::RW>::new(
+            self.interface(),
+            address as u8,
+            field_sets::SusTurboCurrent::new,
         )
     }
     pub fn lifetime_data_block_1(
@@ -17230,12 +17253,14 @@ pub mod field_sets {
             self
         }
     }
+    /// MaxTurboPwr(): the maximal peak power value for a 10-ms pulse occurring
+    /// on top of a 10-s 2 C-rate pulse, in cW.
     #[derive(Copy, Clone, Eq, PartialEq)]
-    pub struct TurboPower {
+    pub struct MaxTurboPower {
         /// The internal bits
         bits: [u8; 2],
     }
-    impl ::device_driver::FieldSet for TurboPower {
+    impl ::device_driver::FieldSet for MaxTurboPower {
         const SIZE_BITS: u32 = 16;
         fn new_with_zero() -> Self {
             Self::new_zero()
@@ -17247,7 +17272,7 @@ pub mod field_sets {
             &mut self.bits
         }
     }
-    impl TurboPower {
+    impl MaxTurboPower {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
             Self { bits: [0, 0] }
@@ -17256,87 +17281,87 @@ pub mod field_sets {
         pub const fn new_zero() -> Self {
             Self { bits: [0; 2] }
         }
-        ///Read the `turbo_power` field of the register.
+        ///Read the `max_turbo_power` field of the register.
         ///
-        pub fn turbo_power(&self) -> u16 {
+        pub fn max_turbo_power(&self) -> u16 {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 0, 16) };
             raw
         }
-        ///Write the `turbo_power` field of the register.
+        ///Write the `max_turbo_power` field of the register.
         ///
-        pub fn set_turbo_power(&mut self, value: u16) {
+        pub fn set_max_turbo_power(&mut self, value: u16) {
             let raw = value;
             unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 0, 16, &mut self.bits) };
         }
     }
-    impl From<[u8; 2]> for TurboPower {
+    impl From<[u8; 2]> for MaxTurboPower {
         fn from(bits: [u8; 2]) -> Self {
             Self { bits }
         }
     }
-    impl From<TurboPower> for [u8; 2] {
-        fn from(val: TurboPower) -> Self {
+    impl From<MaxTurboPower> for [u8; 2] {
+        fn from(val: MaxTurboPower) -> Self {
             val.bits
         }
     }
-    impl core::fmt::Debug for TurboPower {
+    impl core::fmt::Debug for MaxTurboPower {
         fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> Result<(), core::fmt::Error> {
-            let mut d = f.debug_struct("TurboPower");
-            d.field("turbo_power", &self.turbo_power());
+            let mut d = f.debug_struct("MaxTurboPower");
+            d.field("max_turbo_power", &self.max_turbo_power());
             d.finish()
         }
     }
     #[cfg(feature = "defmt-03")]
-    impl defmt::Format for TurboPower {
+    impl defmt::Format for MaxTurboPower {
         fn format(&self, f: defmt::Formatter) {
-            defmt::write!(f, "TurboPower {{ ");
-            defmt::write!(f, "turbo_power: {=u16}, ", &self.turbo_power());
+            defmt::write!(f, "MaxTurboPower {{ ");
+            defmt::write!(f, "max_turbo_power: {=u16}, ", &self.max_turbo_power());
             defmt::write!(f, "}}");
         }
     }
-    impl core::ops::BitAnd for TurboPower {
+    impl core::ops::BitAnd for MaxTurboPower {
         type Output = Self;
         fn bitand(mut self, rhs: Self) -> Self::Output {
             self &= rhs;
             self
         }
     }
-    impl core::ops::BitAndAssign for TurboPower {
+    impl core::ops::BitAndAssign for MaxTurboPower {
         fn bitand_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l &= *r;
             }
         }
     }
-    impl core::ops::BitOr for TurboPower {
+    impl core::ops::BitOr for MaxTurboPower {
         type Output = Self;
         fn bitor(mut self, rhs: Self) -> Self::Output {
             self |= rhs;
             self
         }
     }
-    impl core::ops::BitOrAssign for TurboPower {
+    impl core::ops::BitOrAssign for MaxTurboPower {
         fn bitor_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l |= *r;
             }
         }
     }
-    impl core::ops::BitXor for TurboPower {
+    impl core::ops::BitXor for MaxTurboPower {
         type Output = Self;
         fn bitxor(mut self, rhs: Self) -> Self::Output {
             self ^= rhs;
             self
         }
     }
-    impl core::ops::BitXorAssign for TurboPower {
+    impl core::ops::BitXorAssign for MaxTurboPower {
         fn bitxor_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l ^= *r;
             }
         }
     }
-    impl core::ops::Not for TurboPower {
+    impl core::ops::Not for MaxTurboPower {
         type Output = Self;
         fn not(mut self) -> Self::Output {
             for val in self.bits.iter_mut() {
@@ -17345,12 +17370,14 @@ pub mod field_sets {
             self
         }
     }
+    /// SusTurboPwr(): the maximal peak power value for a 10-s pulse (sustained
+    /// turbo power), in cW.
     #[derive(Copy, Clone, Eq, PartialEq)]
-    pub struct TurboFinal {
+    pub struct SusTurboPower {
         /// The internal bits
         bits: [u8; 2],
     }
-    impl ::device_driver::FieldSet for TurboFinal {
+    impl ::device_driver::FieldSet for SusTurboPower {
         const SIZE_BITS: u32 = 16;
         fn new_with_zero() -> Self {
             Self::new_zero()
@@ -17362,7 +17389,7 @@ pub mod field_sets {
             &mut self.bits
         }
     }
-    impl TurboFinal {
+    impl SusTurboPower {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
             Self { bits: [0, 0] }
@@ -17371,87 +17398,87 @@ pub mod field_sets {
         pub const fn new_zero() -> Self {
             Self { bits: [0; 2] }
         }
-        ///Read the `turbo_final` field of the register.
+        ///Read the `sus_turbo_power` field of the register.
         ///
-        pub fn turbo_final(&self) -> u16 {
+        pub fn sus_turbo_power(&self) -> u16 {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 0, 16) };
             raw
         }
-        ///Write the `turbo_final` field of the register.
+        ///Write the `sus_turbo_power` field of the register.
         ///
-        pub fn set_turbo_final(&mut self, value: u16) {
+        pub fn set_sus_turbo_power(&mut self, value: u16) {
             let raw = value;
             unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 0, 16, &mut self.bits) };
         }
     }
-    impl From<[u8; 2]> for TurboFinal {
+    impl From<[u8; 2]> for SusTurboPower {
         fn from(bits: [u8; 2]) -> Self {
             Self { bits }
         }
     }
-    impl From<TurboFinal> for [u8; 2] {
-        fn from(val: TurboFinal) -> Self {
+    impl From<SusTurboPower> for [u8; 2] {
+        fn from(val: SusTurboPower) -> Self {
             val.bits
         }
     }
-    impl core::fmt::Debug for TurboFinal {
+    impl core::fmt::Debug for SusTurboPower {
         fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> Result<(), core::fmt::Error> {
-            let mut d = f.debug_struct("TurboFinal");
-            d.field("turbo_final", &self.turbo_final());
+            let mut d = f.debug_struct("SusTurboPower");
+            d.field("sus_turbo_power", &self.sus_turbo_power());
             d.finish()
         }
     }
     #[cfg(feature = "defmt-03")]
-    impl defmt::Format for TurboFinal {
+    impl defmt::Format for SusTurboPower {
         fn format(&self, f: defmt::Formatter) {
-            defmt::write!(f, "TurboFinal {{ ");
-            defmt::write!(f, "turbo_final: {=u16}, ", &self.turbo_final());
+            defmt::write!(f, "SusTurboPower {{ ");
+            defmt::write!(f, "sus_turbo_power: {=u16}, ", &self.sus_turbo_power());
             defmt::write!(f, "}}");
         }
     }
-    impl core::ops::BitAnd for TurboFinal {
+    impl core::ops::BitAnd for SusTurboPower {
         type Output = Self;
         fn bitand(mut self, rhs: Self) -> Self::Output {
             self &= rhs;
             self
         }
     }
-    impl core::ops::BitAndAssign for TurboFinal {
+    impl core::ops::BitAndAssign for SusTurboPower {
         fn bitand_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l &= *r;
             }
         }
     }
-    impl core::ops::BitOr for TurboFinal {
+    impl core::ops::BitOr for SusTurboPower {
         type Output = Self;
         fn bitor(mut self, rhs: Self) -> Self::Output {
             self |= rhs;
             self
         }
     }
-    impl core::ops::BitOrAssign for TurboFinal {
+    impl core::ops::BitOrAssign for SusTurboPower {
         fn bitor_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l |= *r;
             }
         }
     }
-    impl core::ops::BitXor for TurboFinal {
+    impl core::ops::BitXor for SusTurboPower {
         type Output = Self;
         fn bitxor(mut self, rhs: Self) -> Self::Output {
             self ^= rhs;
             self
         }
     }
-    impl core::ops::BitXorAssign for TurboFinal {
+    impl core::ops::BitXorAssign for SusTurboPower {
         fn bitxor_assign(&mut self, rhs: Self) {
             for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
                 *l ^= *r;
             }
         }
     }
-    impl core::ops::Not for TurboFinal {
+    impl core::ops::Not for SusTurboPower {
         type Output = Self;
         fn not(mut self) -> Self::Output {
             for val in self.bits.iter_mut() {
@@ -17805,6 +17832,8 @@ pub mod field_sets {
             self
         }
     }
+    /// MaxTurboCurr(): the maximal peak current value (max turbo current), in
+    /// mA. The gauge computes a new value every second.
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct TurboCurrent {
         /// The internal bits
@@ -17912,6 +17941,124 @@ pub mod field_sets {
         }
     }
     impl core::ops::Not for TurboCurrent {
+        type Output = Self;
+        fn not(mut self) -> Self::Output {
+            for val in self.bits.iter_mut() {
+                *val = !*val;
+            }
+            self
+        }
+    }
+    /// SusTurboCurr(): the sustained peak current value (sustained turbo
+    /// current), in mA. The gauge computes a new value every second. Not
+    /// available in SEALED mode.
+    #[derive(Copy, Clone, Eq, PartialEq)]
+    pub struct SusTurboCurrent {
+        /// The internal bits
+        bits: [u8; 2],
+    }
+    impl ::device_driver::FieldSet for SusTurboCurrent {
+        const SIZE_BITS: u32 = 16;
+        fn new_with_zero() -> Self {
+            Self::new_zero()
+        }
+        fn get_inner_buffer(&self) -> &[u8] {
+            &self.bits
+        }
+        fn get_inner_buffer_mut(&mut self) -> &mut [u8] {
+            &mut self.bits
+        }
+    }
+    impl SusTurboCurrent {
+        /// Create a new instance, loaded with the reset value (if any)
+        pub const fn new() -> Self {
+            Self { bits: [0, 0] }
+        }
+        /// Create a new instance, loaded with all zeroes
+        pub const fn new_zero() -> Self {
+            Self { bits: [0; 2] }
+        }
+        ///Read the `sus_turbo_current` field of the register.
+        ///
+        pub fn sus_turbo_current(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 0, 16) };
+            raw
+        }
+        ///Write the `sus_turbo_current` field of the register.
+        ///
+        pub fn set_sus_turbo_current(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 0, 16, &mut self.bits) };
+        }
+    }
+    impl From<[u8; 2]> for SusTurboCurrent {
+        fn from(bits: [u8; 2]) -> Self {
+            Self { bits }
+        }
+    }
+    impl From<SusTurboCurrent> for [u8; 2] {
+        fn from(val: SusTurboCurrent) -> Self {
+            val.bits
+        }
+    }
+    impl core::fmt::Debug for SusTurboCurrent {
+        fn fmt(&self, f: &mut core::fmt::Formatter<'_>) -> Result<(), core::fmt::Error> {
+            let mut d = f.debug_struct("SusTurboCurrent");
+            d.field("sus_turbo_current", &self.sus_turbo_current());
+            d.finish()
+        }
+    }
+    #[cfg(feature = "defmt-03")]
+    impl defmt::Format for SusTurboCurrent {
+        fn format(&self, f: defmt::Formatter) {
+            defmt::write!(f, "SusTurboCurrent {{ ");
+            defmt::write!(f, "sus_turbo_current: {=u16}, ", &self.sus_turbo_current());
+            defmt::write!(f, "}}");
+        }
+    }
+    impl core::ops::BitAnd for SusTurboCurrent {
+        type Output = Self;
+        fn bitand(mut self, rhs: Self) -> Self::Output {
+            self &= rhs;
+            self
+        }
+    }
+    impl core::ops::BitAndAssign for SusTurboCurrent {
+        fn bitand_assign(&mut self, rhs: Self) {
+            for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
+                *l &= *r;
+            }
+        }
+    }
+    impl core::ops::BitOr for SusTurboCurrent {
+        type Output = Self;
+        fn bitor(mut self, rhs: Self) -> Self::Output {
+            self |= rhs;
+            self
+        }
+    }
+    impl core::ops::BitOrAssign for SusTurboCurrent {
+        fn bitor_assign(&mut self, rhs: Self) {
+            for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
+                *l |= *r;
+            }
+        }
+    }
+    impl core::ops::BitXor for SusTurboCurrent {
+        type Output = Self;
+        fn bitxor(mut self, rhs: Self) -> Self::Output {
+            self ^= rhs;
+            self
+        }
+    }
+    impl core::ops::BitXorAssign for SusTurboCurrent {
+        fn bitxor_assign(&mut self, rhs: Self) {
+            for (l, r) in self.bits.iter_mut().zip(&rhs.bits) {
+                *l ^= *r;
+            }
+        }
+    }
+    impl core::ops::Not for SusTurboCurrent {
         type Output = Self;
         fn not(mut self) -> Self::Output {
             for val in self.bits.iter_mut() {
@@ -20591,12 +20738,22 @@ pub mod field_sets {
         GaugingStatus(GaugingStatus),
         ManufacturingStatus(ManufacturingStatus),
         AfeReg(AfeReg),
-        TurboPower(TurboPower),
-        TurboFinal(TurboFinal),
+        /// MaxTurboPwr(): the maximal peak power value for a 10-ms pulse occurring
+        /// on top of a 10-s 2 C-rate pulse, in cW.
+        MaxTurboPower(MaxTurboPower),
+        /// SusTurboPwr(): the maximal peak power value for a 10-s pulse (sustained
+        /// turbo power), in cW.
+        SusTurboPower(SusTurboPower),
         TurboPackR(TurboPackR),
         TurboSysR(TurboSysR),
         TurboEdv(TurboEdv),
+        /// MaxTurboCurr(): the maximal peak current value (max turbo current), in
+        /// mA. The gauge computes a new value every second.
         TurboCurrent(TurboCurrent),
+        /// SusTurboCurr(): the sustained peak current value (sustained turbo
+        /// current), in mA. The gauge computes a new value every second. Not
+        /// available in SEALED mode.
+        SusTurboCurrent(SusTurboCurrent),
         LifetimeDataBlock1(LifetimeDataBlock1),
         LifetimeDataBlock2(LifetimeDataBlock2),
         LifetimeDataBlock3(LifetimeDataBlock3),
@@ -20692,12 +20849,13 @@ pub mod field_sets {
                 Self::GaugingStatus(val) => core::fmt::Debug::fmt(val, f),
                 Self::ManufacturingStatus(val) => core::fmt::Debug::fmt(val, f),
                 Self::AfeReg(val) => core::fmt::Debug::fmt(val, f),
-                Self::TurboPower(val) => core::fmt::Debug::fmt(val, f),
-                Self::TurboFinal(val) => core::fmt::Debug::fmt(val, f),
+                Self::MaxTurboPower(val) => core::fmt::Debug::fmt(val, f),
+                Self::SusTurboPower(val) => core::fmt::Debug::fmt(val, f),
                 Self::TurboPackR(val) => core::fmt::Debug::fmt(val, f),
                 Self::TurboSysR(val) => core::fmt::Debug::fmt(val, f),
                 Self::TurboEdv(val) => core::fmt::Debug::fmt(val, f),
                 Self::TurboCurrent(val) => core::fmt::Debug::fmt(val, f),
+                Self::SusTurboCurrent(val) => core::fmt::Debug::fmt(val, f),
                 Self::LifetimeDataBlock1(val) => core::fmt::Debug::fmt(val, f),
                 Self::LifetimeDataBlock2(val) => core::fmt::Debug::fmt(val, f),
                 Self::LifetimeDataBlock3(val) => core::fmt::Debug::fmt(val, f),
@@ -20798,12 +20956,13 @@ pub mod field_sets {
                 Self::GaugingStatus(val) => defmt::Format::format(val, f),
                 Self::ManufacturingStatus(val) => defmt::Format::format(val, f),
                 Self::AfeReg(val) => defmt::Format::format(val, f),
-                Self::TurboPower(val) => defmt::Format::format(val, f),
-                Self::TurboFinal(val) => defmt::Format::format(val, f),
+                Self::MaxTurboPower(val) => defmt::Format::format(val, f),
+                Self::SusTurboPower(val) => defmt::Format::format(val, f),
                 Self::TurboPackR(val) => defmt::Format::format(val, f),
                 Self::TurboSysR(val) => defmt::Format::format(val, f),
                 Self::TurboEdv(val) => defmt::Format::format(val, f),
                 Self::TurboCurrent(val) => defmt::Format::format(val, f),
+                Self::SusTurboCurrent(val) => defmt::Format::format(val, f),
                 Self::LifetimeDataBlock1(val) => defmt::Format::format(val, f),
                 Self::LifetimeDataBlock2(val) => defmt::Format::format(val, f),
                 Self::LifetimeDataBlock3(val) => defmt::Format::format(val, f),
@@ -21210,14 +21369,14 @@ pub mod field_sets {
             Self::AfeReg(val)
         }
     }
-    impl From<TurboPower> for FieldSetValue {
-        fn from(val: TurboPower) -> Self {
-            Self::TurboPower(val)
+    impl From<MaxTurboPower> for FieldSetValue {
+        fn from(val: MaxTurboPower) -> Self {
+            Self::MaxTurboPower(val)
         }
     }
-    impl From<TurboFinal> for FieldSetValue {
-        fn from(val: TurboFinal) -> Self {
-            Self::TurboFinal(val)
+    impl From<SusTurboPower> for FieldSetValue {
+        fn from(val: SusTurboPower) -> Self {
+            Self::SusTurboPower(val)
         }
     }
     impl From<TurboPackR> for FieldSetValue {
@@ -21238,6 +21397,11 @@ pub mod field_sets {
     impl From<TurboCurrent> for FieldSetValue {
         fn from(val: TurboCurrent) -> Self {
             Self::TurboCurrent(val)
+        }
+    }
+    impl From<SusTurboCurrent> for FieldSetValue {
+        fn from(val: SusTurboCurrent) -> Self {
+            Self::SusTurboCurrent(val)
         }
     }
     impl From<LifetimeDataBlock1> for FieldSetValue {

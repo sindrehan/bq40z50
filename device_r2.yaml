@@ -3247,29 +3247,35 @@ AFE_REG:
       start: 160
       end: 168
 
-TURBO_POWER:
+MAX_TURBO_POWER:
   type: register
   address: 0x59
   size_bits: 16
   access: RW
   fields:
-    TURBO_POWER:
+    MAX_TURBO_POWER:
       base: uint
       access: RW
       start: 0
       end: 16
+  description: |
+    MaxTurboPwr(): the maximal peak power value for a 10-ms pulse occurring
+    on top of a 10-s 2 C-rate pulse, in cW.
 
-TURBO_FINAL:
+SUS_TURBO_POWER:
   type: register
   address: 0x5A
   size_bits: 16
   access: RW
   fields:
-    TURBO_FINAL:
+    SUS_TURBO_POWER:
       base: uint
       access: RW
       start: 0
       end: 16
+  description: |
+    SusTurboPwr(): the maximal peak power value for a 10-s pulse (sustained
+    turbo power), in cW.
 
 TURBO_PACK_R:
   type: register
@@ -3318,6 +3324,25 @@ TURBO_CURRENT:
       access: RW
       start: 0
       end: 16
+  description: |
+    MaxTurboCurr(): the maximal peak current value (max turbo current), in
+    mA. The gauge computes a new value every second.
+
+SUS_TURBO_CURRENT:
+  type: register
+  address: 0x5F
+  size_bits: 16
+  access: RW
+  fields:
+    SUS_TURBO_CURRENT:
+      base: uint
+      access: RW
+      start: 0
+      end: 16
+  description: |
+    SusTurboCurr(): the sustained peak current value (sustained turbo
+    current), in mA. The gauge computes a new value every second. Not
+    available in SEALED mode.
 
 LIFETIME_DATA_BLOCK_1:
   type: register
