@@ -1310,7 +1310,7 @@ MAC_DA_STATUS_1:
 MAC_DA_STATUS_2:
   type: command
   address: 0x447200
-  size_bits_out: 112
+  size_bits_out: 128
   fields_out:
     INT_TEMP:
       base: uint
@@ -1340,6 +1340,10 @@ MAC_DA_STATUS_2:
       base: uint
       start: 96
       end: 112
+    GAUGING_TEMP:
+      base: uint
+      start: 112
+      end: 128
 
 MAC_GAUGE_STATUS_1:
   type: command
@@ -1558,7 +1562,7 @@ MAC_GAUGE_STATUS_3:
 MAC_CB_STATUS:
   type: command
   address: 0x447600
-  size_bits_out: 64
+  size_bits_out: 144
   fields_out:
     CB_TIME_0:
       base: uint
@@ -1576,6 +1580,26 @@ MAC_CB_STATUS:
       base: uint
       start: 48
       end: 64
+    CELL_1_BALANCE_DOD:
+      base: uint
+      start: 64
+      end: 80
+    CELL_2_BALANCE_DOD:
+      base: uint
+      start: 80
+      end: 96
+    CELL_3_BALANCE_DOD:
+      base: uint
+      start: 96
+      end: 112
+    CELL_4_BALANCE_DOD:
+      base: uint
+      start: 112
+      end: 128
+    TOTAL_DOD_CHRG:
+      base: uint
+      start: 128
+      end: 144
 
 MAC_STATE_OF_HEALTH:
   type: command
@@ -3767,7 +3791,7 @@ DA_STATUS_1:
 DA_STATUS_2:
   type: register
   address: 0x72
-  size_bits: 112
+  size_bits: 128
   access: RO
   fields:
     INT_TEMP:
@@ -3805,6 +3829,11 @@ DA_STATUS_2:
       access: RO
       start: 96
       end: 112
+    GAUGING_TEMP:
+      base: uint
+      access: RO
+      start: 112
+      end: 128
 
 GAUGE_STATUS_1:
   type: register
@@ -4072,7 +4101,7 @@ GAUGE_STATUS_3:
 CB_STATUS:
   type: register
   address: 0x76
-  size_bits: 64
+  size_bits: 144
   access: RO
   fields:
     CB_TIME_0:
@@ -4095,6 +4124,31 @@ CB_STATUS:
       access: RO
       start: 48
       end: 64
+    CELL_1_BALANCE_DOD:
+      base: uint
+      access: RO
+      start: 64
+      end: 80
+    CELL_2_BALANCE_DOD:
+      base: uint
+      access: RO
+      start: 80
+      end: 96
+    CELL_3_BALANCE_DOD:
+      base: uint
+      access: RO
+      start: 96
+      end: 112
+    CELL_4_BALANCE_DOD:
+      base: uint
+      access: RO
+      start: 112
+      end: 128
+    TOTAL_DOD_CHRG:
+      base: uint
+      access: RO
+      start: 128
+      end: 144
 
 STATE_OF_HEALTH:
   type: register

@@ -8195,10 +8195,10 @@ pub mod field_sets {
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct MacDaStatus2FieldsOut {
         /// The internal bits
-        bits: [u8; 14],
+        bits: [u8; 16],
     }
     impl ::device_driver::FieldSet for MacDaStatus2FieldsOut {
-        const SIZE_BITS: u32 = 112;
+        const SIZE_BITS: u32 = 128;
         fn new_with_zero() -> Self {
             Self::new_zero()
         }
@@ -8213,12 +8213,12 @@ pub mod field_sets {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
             Self {
-                bits: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                bits: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             }
         }
         /// Create a new instance, loaded with all zeroes
         pub const fn new_zero() -> Self {
-            Self { bits: [0; 14] }
+            Self { bits: [0; 16] }
         }
         ///Read the `int_temp` field of the register.
         ///
@@ -8260,6 +8260,12 @@ pub mod field_sets {
         ///
         pub fn fet_temp(&self) -> u16 {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 96, 112) };
+            raw
+        }
+        ///Read the `gauging_temp` field of the register.
+        ///
+        pub fn gauging_temp(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 112, 128) };
             raw
         }
         ///Write the `int_temp` field of the register.
@@ -8304,13 +8310,19 @@ pub mod field_sets {
             let raw = value;
             unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 96, 112, &mut self.bits) };
         }
+        ///Write the `gauging_temp` field of the register.
+        ///
+        pub fn set_gauging_temp(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 112, 128, &mut self.bits) };
+        }
     }
-    impl From<[u8; 14]> for MacDaStatus2FieldsOut {
-        fn from(bits: [u8; 14]) -> Self {
+    impl From<[u8; 16]> for MacDaStatus2FieldsOut {
+        fn from(bits: [u8; 16]) -> Self {
             Self { bits }
         }
     }
-    impl From<MacDaStatus2FieldsOut> for [u8; 14] {
+    impl From<MacDaStatus2FieldsOut> for [u8; 16] {
         fn from(val: MacDaStatus2FieldsOut) -> Self {
             val.bits
         }
@@ -8325,6 +8337,7 @@ pub mod field_sets {
             d.field("ts_4_temp", &self.ts_4_temp());
             d.field("cell_temp", &self.cell_temp());
             d.field("fet_temp", &self.fet_temp());
+            d.field("gauging_temp", &self.gauging_temp());
             d.finish()
         }
     }
@@ -8339,6 +8352,7 @@ pub mod field_sets {
             defmt::write!(f, "ts_4_temp: {=u16}, ", &self.ts_4_temp());
             defmt::write!(f, "cell_temp: {=u16}, ", &self.cell_temp());
             defmt::write!(f, "fet_temp: {=u16}, ", &self.fet_temp());
+            defmt::write!(f, "gauging_temp: {=u16}, ", &self.gauging_temp());
             defmt::write!(f, "}}");
         }
     }
@@ -9381,10 +9395,10 @@ pub mod field_sets {
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct MacCbStatusFieldsOut {
         /// The internal bits
-        bits: [u8; 8],
+        bits: [u8; 18],
     }
     impl ::device_driver::FieldSet for MacCbStatusFieldsOut {
-        const SIZE_BITS: u32 = 64;
+        const SIZE_BITS: u32 = 144;
         fn new_with_zero() -> Self {
             Self::new_zero()
         }
@@ -9399,12 +9413,12 @@ pub mod field_sets {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
             Self {
-                bits: [0, 0, 0, 0, 0, 0, 0, 0],
+                bits: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             }
         }
         /// Create a new instance, loaded with all zeroes
         pub const fn new_zero() -> Self {
-            Self { bits: [0; 8] }
+            Self { bits: [0; 18] }
         }
         ///Read the `cb_time_0` field of the register.
         ///
@@ -9428,6 +9442,36 @@ pub mod field_sets {
         ///
         pub fn cb_time_3(&self) -> u16 {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 48, 64) };
+            raw
+        }
+        ///Read the `cell_1_balance_dod` field of the register.
+        ///
+        pub fn cell_1_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 64, 80) };
+            raw
+        }
+        ///Read the `cell_2_balance_dod` field of the register.
+        ///
+        pub fn cell_2_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 80, 96) };
+            raw
+        }
+        ///Read the `cell_3_balance_dod` field of the register.
+        ///
+        pub fn cell_3_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 96, 112) };
+            raw
+        }
+        ///Read the `cell_4_balance_dod` field of the register.
+        ///
+        pub fn cell_4_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 112, 128) };
+            raw
+        }
+        ///Read the `total_dod_chrg` field of the register.
+        ///
+        pub fn total_dod_chrg(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 128, 144) };
             raw
         }
         ///Write the `cb_time_0` field of the register.
@@ -9454,13 +9498,43 @@ pub mod field_sets {
             let raw = value;
             unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 48, 64, &mut self.bits) };
         }
+        ///Write the `cell_1_balance_dod` field of the register.
+        ///
+        pub fn set_cell_1_balance_dod(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 64, 80, &mut self.bits) };
+        }
+        ///Write the `cell_2_balance_dod` field of the register.
+        ///
+        pub fn set_cell_2_balance_dod(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 80, 96, &mut self.bits) };
+        }
+        ///Write the `cell_3_balance_dod` field of the register.
+        ///
+        pub fn set_cell_3_balance_dod(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 96, 112, &mut self.bits) };
+        }
+        ///Write the `cell_4_balance_dod` field of the register.
+        ///
+        pub fn set_cell_4_balance_dod(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 112, 128, &mut self.bits) };
+        }
+        ///Write the `total_dod_chrg` field of the register.
+        ///
+        pub fn set_total_dod_chrg(&mut self, value: u16) {
+            let raw = value;
+            unsafe { ::device_driver::ops::store_lsb0::<u16, ::device_driver::ops::LE>(raw, 128, 144, &mut self.bits) };
+        }
     }
-    impl From<[u8; 8]> for MacCbStatusFieldsOut {
-        fn from(bits: [u8; 8]) -> Self {
+    impl From<[u8; 18]> for MacCbStatusFieldsOut {
+        fn from(bits: [u8; 18]) -> Self {
             Self { bits }
         }
     }
-    impl From<MacCbStatusFieldsOut> for [u8; 8] {
+    impl From<MacCbStatusFieldsOut> for [u8; 18] {
         fn from(val: MacCbStatusFieldsOut) -> Self {
             val.bits
         }
@@ -9472,6 +9546,11 @@ pub mod field_sets {
             d.field("cb_time_1", &self.cb_time_1());
             d.field("cb_time_2", &self.cb_time_2());
             d.field("cb_time_3", &self.cb_time_3());
+            d.field("cell_1_balance_dod", &self.cell_1_balance_dod());
+            d.field("cell_2_balance_dod", &self.cell_2_balance_dod());
+            d.field("cell_3_balance_dod", &self.cell_3_balance_dod());
+            d.field("cell_4_balance_dod", &self.cell_4_balance_dod());
+            d.field("total_dod_chrg", &self.total_dod_chrg());
             d.finish()
         }
     }
@@ -9483,6 +9562,11 @@ pub mod field_sets {
             defmt::write!(f, "cb_time_1: {=u16}, ", &self.cb_time_1());
             defmt::write!(f, "cb_time_2: {=u16}, ", &self.cb_time_2());
             defmt::write!(f, "cb_time_3: {=u16}, ", &self.cb_time_3());
+            defmt::write!(f, "cell_1_balance_dod: {=u16}, ", &self.cell_1_balance_dod());
+            defmt::write!(f, "cell_2_balance_dod: {=u16}, ", &self.cell_2_balance_dod());
+            defmt::write!(f, "cell_3_balance_dod: {=u16}, ", &self.cell_3_balance_dod());
+            defmt::write!(f, "cell_4_balance_dod: {=u16}, ", &self.cell_4_balance_dod());
+            defmt::write!(f, "total_dod_chrg: {=u16}, ", &self.total_dod_chrg());
             defmt::write!(f, "}}");
         }
     }
@@ -19151,10 +19235,10 @@ pub mod field_sets {
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct DaStatus2 {
         /// The internal bits
-        bits: [u8; 14],
+        bits: [u8; 16],
     }
     impl ::device_driver::FieldSet for DaStatus2 {
-        const SIZE_BITS: u32 = 112;
+        const SIZE_BITS: u32 = 128;
         fn new_with_zero() -> Self {
             Self::new_zero()
         }
@@ -19169,12 +19253,12 @@ pub mod field_sets {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
             Self {
-                bits: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                bits: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             }
         }
         /// Create a new instance, loaded with all zeroes
         pub const fn new_zero() -> Self {
-            Self { bits: [0; 14] }
+            Self { bits: [0; 16] }
         }
         ///Read the `int_temp` field of the register.
         ///
@@ -19218,13 +19302,19 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 96, 112) };
             raw
         }
+        ///Read the `gauging_temp` field of the register.
+        ///
+        pub fn gauging_temp(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 112, 128) };
+            raw
+        }
     }
-    impl From<[u8; 14]> for DaStatus2 {
-        fn from(bits: [u8; 14]) -> Self {
+    impl From<[u8; 16]> for DaStatus2 {
+        fn from(bits: [u8; 16]) -> Self {
             Self { bits }
         }
     }
-    impl From<DaStatus2> for [u8; 14] {
+    impl From<DaStatus2> for [u8; 16] {
         fn from(val: DaStatus2) -> Self {
             val.bits
         }
@@ -19239,6 +19329,7 @@ pub mod field_sets {
             d.field("ts_4_temp", &self.ts_4_temp());
             d.field("cell_temp", &self.cell_temp());
             d.field("fet_temp", &self.fet_temp());
+            d.field("gauging_temp", &self.gauging_temp());
             d.finish()
         }
     }
@@ -19253,6 +19344,7 @@ pub mod field_sets {
             defmt::write!(f, "ts_4_temp: {=u16}, ", &self.ts_4_temp());
             defmt::write!(f, "cell_temp: {=u16}, ", &self.cell_temp());
             defmt::write!(f, "fet_temp: {=u16}, ", &self.fet_temp());
+            defmt::write!(f, "gauging_temp: {=u16}, ", &self.gauging_temp());
             defmt::write!(f, "}}");
         }
     }
@@ -20013,10 +20105,10 @@ pub mod field_sets {
     #[derive(Copy, Clone, Eq, PartialEq)]
     pub struct CbStatus {
         /// The internal bits
-        bits: [u8; 8],
+        bits: [u8; 18],
     }
     impl ::device_driver::FieldSet for CbStatus {
-        const SIZE_BITS: u32 = 64;
+        const SIZE_BITS: u32 = 144;
         fn new_with_zero() -> Self {
             Self::new_zero()
         }
@@ -20031,12 +20123,12 @@ pub mod field_sets {
         /// Create a new instance, loaded with the reset value (if any)
         pub const fn new() -> Self {
             Self {
-                bits: [0, 0, 0, 0, 0, 0, 0, 0],
+                bits: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
             }
         }
         /// Create a new instance, loaded with all zeroes
         pub const fn new_zero() -> Self {
-            Self { bits: [0; 8] }
+            Self { bits: [0; 18] }
         }
         ///Read the `cb_time_0` field of the register.
         ///
@@ -20062,13 +20154,43 @@ pub mod field_sets {
             let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 48, 64) };
             raw
         }
+        ///Read the `cell_1_balance_dod` field of the register.
+        ///
+        pub fn cell_1_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 64, 80) };
+            raw
+        }
+        ///Read the `cell_2_balance_dod` field of the register.
+        ///
+        pub fn cell_2_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 80, 96) };
+            raw
+        }
+        ///Read the `cell_3_balance_dod` field of the register.
+        ///
+        pub fn cell_3_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 96, 112) };
+            raw
+        }
+        ///Read the `cell_4_balance_dod` field of the register.
+        ///
+        pub fn cell_4_balance_dod(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 112, 128) };
+            raw
+        }
+        ///Read the `total_dod_chrg` field of the register.
+        ///
+        pub fn total_dod_chrg(&self) -> u16 {
+            let raw = unsafe { ::device_driver::ops::load_lsb0::<u16, ::device_driver::ops::LE>(&self.bits, 128, 144) };
+            raw
+        }
     }
-    impl From<[u8; 8]> for CbStatus {
-        fn from(bits: [u8; 8]) -> Self {
+    impl From<[u8; 18]> for CbStatus {
+        fn from(bits: [u8; 18]) -> Self {
             Self { bits }
         }
     }
-    impl From<CbStatus> for [u8; 8] {
+    impl From<CbStatus> for [u8; 18] {
         fn from(val: CbStatus) -> Self {
             val.bits
         }
@@ -20080,6 +20202,11 @@ pub mod field_sets {
             d.field("cb_time_1", &self.cb_time_1());
             d.field("cb_time_2", &self.cb_time_2());
             d.field("cb_time_3", &self.cb_time_3());
+            d.field("cell_1_balance_dod", &self.cell_1_balance_dod());
+            d.field("cell_2_balance_dod", &self.cell_2_balance_dod());
+            d.field("cell_3_balance_dod", &self.cell_3_balance_dod());
+            d.field("cell_4_balance_dod", &self.cell_4_balance_dod());
+            d.field("total_dod_chrg", &self.total_dod_chrg());
             d.finish()
         }
     }
@@ -20091,6 +20218,11 @@ pub mod field_sets {
             defmt::write!(f, "cb_time_1: {=u16}, ", &self.cb_time_1());
             defmt::write!(f, "cb_time_2: {=u16}, ", &self.cb_time_2());
             defmt::write!(f, "cb_time_3: {=u16}, ", &self.cb_time_3());
+            defmt::write!(f, "cell_1_balance_dod: {=u16}, ", &self.cell_1_balance_dod());
+            defmt::write!(f, "cell_2_balance_dod: {=u16}, ", &self.cell_2_balance_dod());
+            defmt::write!(f, "cell_3_balance_dod: {=u16}, ", &self.cell_3_balance_dod());
+            defmt::write!(f, "cell_4_balance_dod: {=u16}, ", &self.cell_4_balance_dod());
+            defmt::write!(f, "total_dod_chrg: {=u16}, ", &self.total_dod_chrg());
             defmt::write!(f, "}}");
         }
     }
