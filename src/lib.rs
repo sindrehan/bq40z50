@@ -13,7 +13,7 @@
 //! - [`Datasheet R5`]
 //!
 //! [`Datasheet R1`]: https://www.ti.com/lit/ug/sluua43a/sluua43a.pdf
-//! [`Datasheet R2`]: https://www.ti.com/lit/ug/sluub54a/sluub54a.pdf
+//! [`Datasheet R2`]: https://www.ti.com/lit/ug/sluubk0b/sluubk0b.pdf
 //! [`Datasheet R3`]: https://www.ti.com/lit/ug/sluubu5a/sluubu5a.pdf
 //! [`Datasheet R4`]: https://www.ti.com/lit/ug/sluuch2/sluuch2.pdf
 //! [`Datasheet R5`]: https://www.ti.com/lit/ug/sluucn4b/sluucn4b.pdf

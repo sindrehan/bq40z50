@@ -10,8 +10,9 @@ A `#[no_std]` platform-agnostic driver for the [BQ40Z50](https://www.ti.com/prod
 
 A higher level API exposing standard Smart Battery Specification functions is built on top of the lower level register accessor using the [embedded-batteries](https://github.com/OpenDevicePartnership/embedded-batteries) traits.
 
-Four revisions of the chip are currently supported:
+Five revisions of the chip are currently supported:
 - [BQ40Z50](https://www.ti.com/lit/ug/sluua43a/sluua43a.pdf)
+- [BQ40Z50-R2](https://www.ti.com/lit/ug/sluubk0b/sluubk0b.pdf)
 - [BQ40Z50-R3](https://www.ti.com/lit/ug/sluubu5a/sluubu5a.pdf)
 - [BQ40Z50-R4](https://www.ti.com/lit/ug/sluuch2/sluuch2.pdf)
 - [BQ40Z50-R5](https://www.ti.com/lit/ug/sluucn4b/sluucn4b.pdf)
