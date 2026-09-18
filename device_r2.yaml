@@ -351,9 +351,6 @@ MAC_SAFETY_STATUS:
     PTO:
       base: bool
       start: 18
-    PTOS:
-      base: bool
-      start: 19
     CTO:
       base: bool
       start: 20
@@ -2516,10 +2513,6 @@ SAFETY_STATUS:
       base: bool
       access: RO
       start: 18
-    PTOS:
-      base: bool
-      access: RO
-      start: 19
     CTO:
       base: bool
       access: RO
